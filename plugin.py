@@ -5,8 +5,8 @@ from . import *
 
 @ultroid_cmd(pattern="https$")
 async def _(event):
-	if event.fwd_from:
-		return
+    if event.fwd_from:
+        return
     chat = "@hqproxy_bot"
     msg = await eor(ult, "Sending Your Https Proxies...")
     async with ultroid_bot.conversation(chat) as conv:
