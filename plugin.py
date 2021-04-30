@@ -8,7 +8,7 @@ async def _(event):
     if event.fwd_from:
         return
     chat = "@hqproxy_bot"
-    msg = await eor(ult, "Sending Your Https Proxies...")
+    msg = await eor(event, "Sending Your Https Proxies...")
     async with ultroid_bot.conversation(chat) as conv:
         try:
             response = conv.wait_event(
