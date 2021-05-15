@@ -11,6 +11,7 @@ async def gadd(event):
     if not event.out and not is_fullsudo(event.sender_id):
         return await eor(event, "`This Command Is Sudo Restricted.`")
     tt = event.text
+    Omk = await eor(event, "`Processing...`")
     er = 0
     done = 0
     async for x in ultroid_bot.iter_dialogs():
@@ -21,4 +22,4 @@ async def gadd(event):
                 await ultroid(e(chat, "@whyvrowhy"))
             except BaseException:
                 er += 1
-    await kk.edit(f"Done in {done} chats, error in {er} chat(s)")
+    await Omk.edit(f"Done in {done} chats, error in {er} chat(s)")
