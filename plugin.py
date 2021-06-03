@@ -1,25 +1,32 @@
+import os
+
 from telethon import events
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.channels import InviteToChannelRequest as e
+from telethon.tl.functions.channels import EditAdminRequest
+from telethon.tl.types import ChatAdminRights
 
 from . import *
 
 @ultroid_cmd(
-    pattern="gadd ?(.*)",
+    pattern="unm ?(.*)",
 )
-async def gadd(event):
-    if not event.out and not is_fullsudo(event.sender_id):
-        return await eor(event, "`This Command Is Sudo Restricted.`")
-    tt = event.text
-    Omk = await eor(event, "`Processing...`")
-    er = 0
-    done = 0
-    async for x in ultroid_bot.iter_dialogs():
-        if x.is_group:
-            chat = x.id
+async def _(e):
+    xx = await eor(e, "`UnGmuting...`")
+    if e.reply_to_msg_id:
+        userid = (await e.get_reply_message()).sender_id
+    elif e.pattern_match.group(1):
+        userid = await get_user_id(e.pattern_match.group(1))
+    elif e.is_private:
+        userid = (await e.get_chat()).id
+    else:
+        return await eod(xx, "`Reply to some msg or add their id.`", time=5)
+    name = (await e.client.get_entity(userid)).first_name
+    chats = 0
+    async for hurr in e.client.iter_dialogs():
+        if hurr.is_group:
             try:
-                done += 1
-                await ultroid(e(chat, "@whyvrowhy"))
+                await e.client.edit_permissions(hurr.id, userid, send_messages=True)
+                chats += 1
             except BaseException:
-                er += 1
-    await Omk.edit(f"Done in {done} chats, error in {er} chat(s)")
+                pass
+    ungmute(userid)
+    await xx.edit(f"`Ungmuted` [{name}](tg://user?id={userid}) `in {chats} chats.`")
